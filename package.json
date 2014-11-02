@@ -1,0 +1,25 @@
+{
+  "name": "diffie-hellman",
+  "version": "1.0.0",
+  "description": "pure js diffie-hellman",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/calvinmetcalf/diffie-hellman.git"
+  },
+  "keywords": [
+    "diffie",
+    "hellman",
+    "diffiehellman",
+    "dh"
+  ],
+  "author": "Calvin Metcalf",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/calvinmetcalf/diffie-hellman/issues"
+  },
+  "homepage": "https://github.com/calvinmetcalf/diffie-hellman"
+}
