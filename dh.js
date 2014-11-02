@@ -1,18 +1,6 @@
-
 var BN = require('bn.js');
 
-dh.generateKeys();
-
-var priv = new BN(dh.getPrivateKey().toString('hex'), 16);
-console.log('priv', priv);
-var gen = new BN(dh.getGenerator().toString('hex'), 16);
-console.log('gen', gen);
-var prime = BN.mont(new BN(dh.getPrime().toString('hex'), 16));
-console.log('prime', prime);
-var publ = new BN(dh.getPublicKey().toString('hex'), 16);
-console.log('publ', publ);
-var calcpubl = gen.toRed(prime).redPow(priv).fromRed()
-console.log('compare', publ.toString(16) === calcpubl.toString(16));
+module.exports = DH;
 
 function DH(prime, crypto) {
 	this.setGenerator(new Buffer([2]));
