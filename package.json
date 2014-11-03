@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/calvinmetcalf/diffie-hellman",
   "dependencies": {
-    "bn.js": "^0.15.0"
+    "bn.js": "calvinmetcalf/bn.js#primes"
   },
   "devDependencies": {
     "tap-spec": "^1.0.1",
