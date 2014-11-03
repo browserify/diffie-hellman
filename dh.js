@@ -4,7 +4,7 @@ module.exports = DH;
 
 function DH(prime, crypto) {
 	this.setGenerator(new Buffer([2]));
-	this.__prime = new BN(prime.toString('hex'), 16);
+	this.__prime = new BN(prime);
 	this._prime = BN.mont(this.__prime);
 	this._pub = void 0;
 	this._priv = void 0;
@@ -19,15 +19,15 @@ DH.prototype.generateKeys = function () {
 };
 
 DH.prototype.computeSecret = function (other) {
-	other = new BN(other.toString('hex'), 16);
+	other = new BN(other);
 	other = other.toRed(this._prime);
 	var secret = other.redPow(this._priv).fromRed();
-	return new Buffer(secret.toString('hex'), 'hex');
+	return new Buffer(secret.toArray());
 }
-DH.prototype.getPublicKey = function () {
+DH.prototype.getPublicKey = function (enc) {
 	return returnValue(this._pub, enc);
 };
-DH.prototype.getPrivateKey = function () {
+DH.prototype.getPrivateKey = function (enc) {
 	return returnValue(this._priv, enc);
 };
 
@@ -42,31 +42,27 @@ DH.prototype.setGenerator = function (gen, enc) {
 	if (!Buffer.isBuffer(gen)) {
 		gen = new Buffer(gen, enc);
 	}
-	this._gen = new BH(gen.toString('hex'), 16);
+	this._gen = new BN(gen);
 }
 DH.prototype.setPublicKey = function (pub, enc) {
 	enc = enc || 'utf8';
 	if (!Buffer.isBuffer(pub)) {
 		pub = new Buffer(pub, enc);
 	}
-	this._pub = new BH(pub.toString('hex'), 16);
+	this._pub = new BN(pub);
 }
 DH.prototype.setPrivateKey = function (priv, enc) {
 	enc = enc || 'utf8';
 	if (!Buffer.isBuffer(priv)) {
 		priv = new Buffer(priv, enc);
 	}
-	this._priv = new BH(priv.toString('hex'), 16);
+	this._priv = new BN(priv);
 }
 function returnValue(bn, enc) {
-	var hex = bn.toString(16);
-	if (enc === 'hex') {
-		return hex;
-	}
-	var buf = new Buffer(hex, 'hex');
+	var buf = new Buffer(bn.toArray());
 	if (!enc) {
 		return buf;
 	} else {
-		return buf.toString(end);
+		return buf.toString(enc);
 	}
 }
