@@ -1,14 +1,11 @@
 var BN = require('bn.js');
-var primes = require('./primes.json');
-Object.keys(primes).forEach(function (mod){
-	BN.primes[mod] = new BN.MPrime(mod, new BN(new Buffer(primes[mod].prime, 'hex')));
-});
+
 module.exports = DH;
 
 function DH(prime, crypto) {
 	this.setGenerator(new Buffer([2]));
-	this.__prime = BN._prime(prime);
-	this._prime = BN.red(this.__prime);
+	this.__prime = new BN(prime);
+	this._prime = BN.mont(this.__prime);
 	this._pub = void 0;
 	this._priv = void 0;
 	this._makeNum = function makeNum() {
@@ -35,7 +32,7 @@ DH.prototype.getPrivateKey = function (enc) {
 };
 
 DH.prototype.getPrime = function (enc) {
-	return returnValue(this.__prime.p, enc);
+	return returnValue(this.__prime, enc);
 };
 DH.prototype.getGenerator = function (enc) {
 	return returnValue(this._gen, enc);
