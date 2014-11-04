@@ -23,7 +23,7 @@ DH.prototype.computeSecret = function (other) {
 	other = other.toRed(this._prime);
 	var secret = other.redPow(this._priv).fromRed();
 	return new Buffer(secret.toArray());
-}
+};
 DH.prototype.getPublicKey = function (enc) {
 	return returnValue(this._pub, enc);
 };
@@ -43,7 +43,7 @@ DH.prototype.setGenerator = function (gen, enc) {
 		gen = new Buffer(gen, enc);
 	}
 	this._gen = new BN(gen);
-}
+};
 DH.prototype.setPublicKey = function (pub, enc) {
 	enc = enc || 'utf8';
 	if (!Buffer.isBuffer(pub)) {
