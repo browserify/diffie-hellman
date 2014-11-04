@@ -4,8 +4,13 @@ module.exports = DH;
 
 function DH(prime, crypto) {
 	this.setGenerator(new Buffer([2]));
-	this.__prime = new BN(prime);
-	this._prime = BN.mont(this.__prime);
+	if (typeof prime === 'string') {
+		this.__prime = BN._prime(prime).p;
+		this._prime = BN.red(prime);
+	} else {
+		this.__prime = new BN(prime);
+		this._prime = BN.mont(this.__prime);
+	}
 	this._pub = void 0;
 	this._priv = void 0;
 	this._makeNum = function makeNum() {
@@ -22,7 +27,14 @@ DH.prototype.computeSecret = function (other) {
 	other = new BN(other);
 	other = other.toRed(this._prime);
 	var secret = other.redPow(this._priv).fromRed();
-	return new Buffer(secret.toArray());
+	var out = new Buffer(secret.toArray());
+	var prime = this.getPrime();
+	if (out.length < prime.length) {
+		var front = new Buffer(prime.length - out.length);
+		front.fill(0);
+		out = Buffer.concat([front, out]);
+	}
+	return out;
 };
 DH.prototype.getPublicKey = function (enc) {
 	return returnValue(this._pub, enc);

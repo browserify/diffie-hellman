@@ -1,5 +1,6 @@
 var primes = require('./primes.json');
 var DH = require('./dh');
+var generatePrime = require('./generatePrime');
 module.exports = function (crypto, exports) {
 	exports.getDiffieHellman = function (mod) {
 		if (mod === 'modp17' || mod === 'modp18') {
@@ -9,7 +10,7 @@ module.exports = function (crypto, exports) {
 	};
 	exports.createDiffieHellman = function (prime, enc) {
 		if (typeof prime === 'number') {
-			throw new Error('generating primes not implimented');
+			return new DH(generatePrime(prime, crypto), crypto);
 		}
 		enc = enc || 'utf8';
 		if (!Buffer.isBuffer(prime)) {
