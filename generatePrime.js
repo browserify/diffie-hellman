@@ -1,19 +1,6 @@
 
-module.exports = generatePrime;
+module.exports = findPrime;
 
-var goodPrimes = {
-  256: 'k256',
-  224: 'p224',
-  192: 'p192',
-  25519: 'p25519'
-};
-function generatePrime(len, crypto) {
-  if (len in goodPrimes) {
-    return goodPrimes[len];
-  } else { 
-    return findPrime(len, crypto);
-  }
-}
 // based on find-prime by Kenan Yildirim
 // https://github.com/KenanY/find-prime
 

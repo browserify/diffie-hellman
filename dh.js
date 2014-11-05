@@ -4,13 +4,8 @@ module.exports = DH;
 
 function DH(prime, crypto) {
 	this.setGenerator(new Buffer([2]));
-	if (typeof prime === 'string') {
-		this.__prime = BN._prime(prime).p;
-		this._prime = BN.red(prime);
-	} else {
-		this.__prime = new BN(prime);
-		this._prime = BN.mont(this.__prime);
-	}
+	this.__prime = new BN(prime);
+	this._prime = BN.mont(this.__prime);
 	this._pub = void 0;
 	this._priv = void 0;
 	this._makeNum = function makeNum() {

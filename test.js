@@ -5,11 +5,8 @@ var myCrypto = require('./');
 var mods = [
    'modp1', 'modp2', 'modp5', 'modp14', 'modp15', 'modp16'/*, 'modp17', 'modp18'*/
 ];
-var lens = [
-  64, 128, 384, 512, 1024, //slow
-  192, 224, 256, 25519  //fast
- ];
- var lens2 = [
+
+ var lens = [
   64, 128, 384, 512, 1024,
   192, 224, 256];
 function run(i) {
@@ -84,7 +81,7 @@ if (process.version && process.version.split('.').length === 3 && parseInt(proce
 }
 test('create primes other way', function (t) {
 		var f = bylen2(t);
-		lens2.forEach(f);
+		lens.forEach(f);
 	});
 var i = 0;
 while (++i < 2) {
