@@ -1,3 +1,4 @@
+
 module.exports = generatePrime;
 
 var goodPrimes = {
@@ -13,7 +14,6 @@ function generatePrime(len, crypto) {
     return findPrime(len, crypto);
   }
 }
-
 // based on find-prime by Kenan Yildirim
 // https://github.com/KenanY/find-prime
 
@@ -63,9 +63,15 @@ function isProbablePrime(n, t) {
   while (i < lowprimes.length) {
     var m = lowprimes[i],
       j = i + 1;
-    while (j < lowprimes.length && m < lplim) m *= lowprimes[j++];
+    while (j < lowprimes.length && m < lplim) {
+      m *= lowprimes[j++];
+    }
     m = x.modn(m);
-    while (i < j) if (m % lowprimes[i++] === 0) return false;
+    while (i < j) {
+      if (m % lowprimes[i++] === 0) {
+        return false;
+      }
+    }
   }
   return millerRabin(x, t);
 }
@@ -87,36 +93,45 @@ function millerRabin(n, t) {
   if (k <= 0) return false;
   var r = n1.shrn(k);
   t = (t + 1) >> 1;
-  if (t > lowprimes.length) t = lowprimes.length;
+  if (t > lowprimes.length) {
+    t = lowprimes.length;
+  }
   var a;
-  var j, bases = []
+  var j, bases = [];
   for (var i = 0; i < t; ++i) {
     for (;;) {
-      j = lowprimes[Math.floor(Math.random() * lowprimes.length)]
+      j = lowprimes[Math.floor(Math.random() * lowprimes.length)];
       if (bases.indexOf(j) == -1) break;
     }
     bases.push(j);
     a = new BN(j);
     var y = a.toRed(mp).redPow(r).fromRed();
-    if (y.cmp(new BN(1)) != 0 && y.cmp(n1) != 0) {
-      var j = 1
-      while (j++ < k && y.cmp(n1) != 0) {
+    if (y.cmp(new BN(1)) != 0 && y.cmp(n1) !== 0) {
+      j = 1;
+      while (j++ < k && y.cmp(n1) !== 0) {
         y = y.toRed(mp).redPow(new BN(2)).fromRed();
-        if (y.cmp(new BN(1)) == 0) return false
+        if (y.cmp(new BN(1)) === 0) {
+          return false;
+        }
       }
-      if (y.cmp(n1) != 0) return false
+      if (y.cmp(n1) !== 0) {
+        return false;
+      }
     }
   }
-  return true
+  return true;
 }
 function findPrime(bits, crypto) {
 
   function generateRandom(bits) {
     var bytes = bits >> 3;
     bytes = bytes || 1;
-    var out = new BN(crypto.randomBytes(bits/8));
+    var out = new BN(crypto.randomBytes(bytes));
     while (out.bitLength() > bits) {
       out.ishrn(1);
+    }
+    if (out.isEven()) {
+      out.iadd(new BN(1));
     }
     return out;
   }
@@ -131,7 +146,7 @@ function findPrime(bits, crypto) {
     if (num.bitLength() > bits) {
       num = generateRandom(bits);
     }
-
+    console.log(num.toString());
     if(isProbablePrime(num, mrTests)) {
       return num;
     }

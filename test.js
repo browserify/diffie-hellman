@@ -5,16 +5,13 @@ var myCrypto = require('./');
 var mods = [
    'modp1', 'modp2', 'modp5', 'modp14', 'modp15', 'modp16'/*, 'modp17', 'modp18'*/
 ];
-var lens = [128, 64, 256,
-  224,
-  192,
-  25519];
-  var lens2 = [256,
-  224,
-  192,
-  512,
-  384,
-  1024];
+var lens = [
+  64, 128, 384, 512, 1024, //slow
+  192, 224, 256, 25519  //fast
+ ];
+ var lens2 = [
+  64, 128, 384, 512, 1024,
+  192, 224, 256];
 function run(i) {
 	mods.forEach(function (mod) {
 		test(mod + ' run ' + i, function (t){

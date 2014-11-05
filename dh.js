@@ -62,14 +62,14 @@ DH.prototype.setPublicKey = function (pub, enc) {
 		pub = new Buffer(pub, enc);
 	}
 	this._pub = new BN(pub);
-}
+};
 DH.prototype.setPrivateKey = function (priv, enc) {
 	enc = enc || 'utf8';
 	if (!Buffer.isBuffer(priv)) {
 		priv = new Buffer(priv, enc);
 	}
 	this._priv = new BN(priv);
-}
+};
 function returnValue(bn, enc) {
 	var buf = new Buffer(bn.toArray());
 	if (!enc) {
