@@ -146,7 +146,6 @@ function findPrime(bits, crypto) {
     if (num.bitLength() > bits) {
       num = generateRandom(bits);
     }
-    console.log(num.toString());
     if(isProbablePrime(num, mrTests)) {
       return num;
     }
