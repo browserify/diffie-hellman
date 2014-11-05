@@ -114,7 +114,11 @@ function findPrime(bits, crypto) {
   function generateRandom(bits) {
     var bytes = bits >> 3;
     bytes = bytes || 1;
-    return new BN(crypto.randomBytes(bits/8));
+    var out = new BN(crypto.randomBytes(bits/8));
+    while (out.bitLength() > bits) {
+      out.ishrn(1);
+    }
+    return out;
   }
   var num = generateRandom(bits);
 
