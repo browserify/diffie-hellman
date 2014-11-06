@@ -13,7 +13,9 @@ function DH(prime, crypto) {
 	};
 }
 DH.prototype.generateKeys = function () {
-	this.setPrivateKey(this._makeNum());
+	if (!this._priv) {
+		this.setPrivateKey(this._makeNum());
+	}
 	this._pub = this._gen.toRed(this._prime).redPow(this._priv).fromRed();
 	return this.getPublicKey();
 };

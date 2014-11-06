@@ -7,7 +7,7 @@ var mods = [
 ];
 
  var lens = [
-  64, 128, 384, 512, 1024,
+  64, 65, 128, 384, 512, 1024,
   192, 224, 256];
 function run(i) {
 	mods.forEach(function (mod) {
@@ -22,7 +22,7 @@ function run(i) {
 			t.equals(p1, p2, 'equal primes');
 			var pubk1 = dh1.getPublicKey();
 			var pubk2 = dh2.getPublicKey();
-			t.notEquals(pubk1, pubk2, 'diff public keys');
+			t.notEquals(pubk1.toString('hex'), pubk2.toString('hex'), 'diff public keys');
 			var pub1 = dh1.computeSecret(pubk2).toString('hex');
 			var pub2 = dh2.computeSecret(pubk1).toString('hex');
 			t.equals(pub1, pub2, 'equal secrets');
@@ -45,7 +45,7 @@ function bylen(t) {
 			t.equals(p1, p2, 'equal primes');
 			var pubk1 = dh1.getPublicKey();
 			var pubk2 = dh2.getPublicKey();
-			t.notEquals(pubk1, pubk2, 'diff public keys');
+			t.notEquals(pubk1.toString('hex'), pubk2.toString('hex'), 'diff public keys');
 			var pub1 = dh1.computeSecret(pubk2).toString('hex');
 			var pub2 = dh2.computeSecret(dh1.getPublicKey()).toString('hex');
 			t.equals(pub1, pub2, 'equal secrets');
@@ -66,7 +66,7 @@ function bylen2(t) {
 			t.equals(p1, p2, 'equal primes');
 			var pubk1 = dh1.getPublicKey();
 			var pubk2 = dh2.getPublicKey();
-			t.notEquals(pubk1, pubk2, 'diff public keys');
+			t.notEquals(pubk1.toString('hex'), pubk2.toString('hex'), 'diff public keys');
 			var pub1 = dh1.computeSecret(pubk2).toString('hex');
 			var pub2 = dh2.computeSecret(dh1.getPublicKey()).toString('hex');
 			t.equals(pub1, pub2, 'equal secrets');
