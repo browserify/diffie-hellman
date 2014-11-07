@@ -7,12 +7,12 @@ module.exports = function (crypto, exports) {
 	};
 	exports.createDiffieHellman = function (prime, enc) {
 		if (typeof prime === 'number') {
-			return new DH(generatePrime(prime, crypto), crypto);
+			return new DH(generatePrime(prime, crypto), crypto, true);
 		}
 		enc = enc || 'utf8';
 		if (!Buffer.isBuffer(prime)) {
 			prime = new Buffer(prime, enc);
 		}
-		return new DH(prime, crypto);
+		return new DH(prime, crypto, true);
 	};
 };

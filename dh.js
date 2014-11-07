@@ -1,20 +1,37 @@
 var BN = require('bn.js');
 
 module.exports = DH;
-
-function DH(prime, crypto) {
+function setPublicKey(pub, enc) {
+	enc = enc || 'utf8';
+	if (!Buffer.isBuffer(pub)) {
+		pub = new Buffer(pub, enc);
+	}
+	this._pub = new BN(pub);
+}
+function setPrivateKey(priv, enc) {
+	enc = enc || 'utf8';
+	if (!Buffer.isBuffer(priv)) {
+		priv = new Buffer(priv, enc);
+	}
+	this._priv = new BN(priv);
+}
+function DH(prime, crypto, malleable) {
 	this.setGenerator(new Buffer([2]));
 	this.__prime = new BN(prime);
 	this._prime = BN.mont(this.__prime);
 	this._pub = void 0;
 	this._priv = void 0;
+	if (malleable) {
+		this.setPublicKey = setPublicKey;
+		this.setPrivateKey = setPrivateKey;
+	}
 	this._makeNum = function makeNum() {
 		return crypto.randomBytes(192);
 	};
 }
 DH.prototype.generateKeys = function () {
 	if (!this._priv) {
-		this.setPrivateKey(this._makeNum());
+		this._priv = new BN(this._makeNum());
 	}
 	this._pub = this._gen.toRed(this._prime).redPow(this._priv).fromRed();
 	return this.getPublicKey();
@@ -33,10 +50,10 @@ DH.prototype.computeSecret = function (other) {
 	}
 	return out;
 };
-DH.prototype.getPublicKey = function (enc) {
+DH.prototype.getPublicKey = function getPublicKey(enc) {
 	return returnValue(this._pub, enc);
 };
-DH.prototype.getPrivateKey = function (enc) {
+DH.prototype.getPrivateKey = function getPrivateKey(enc) {
 	return returnValue(this._priv, enc);
 };
 
@@ -53,20 +70,7 @@ DH.prototype.setGenerator = function (gen, enc) {
 	}
 	this._gen = new BN(gen);
 };
-DH.prototype.setPublicKey = function (pub, enc) {
-	enc = enc || 'utf8';
-	if (!Buffer.isBuffer(pub)) {
-		pub = new Buffer(pub, enc);
-	}
-	this._pub = new BN(pub);
-};
-DH.prototype.setPrivateKey = function (priv, enc) {
-	enc = enc || 'utf8';
-	if (!Buffer.isBuffer(priv)) {
-		priv = new Buffer(priv, enc);
-	}
-	this._priv = new BN(priv);
-};
+
 function returnValue(bn, enc) {
 	var buf = new Buffer(bn.toArray());
 	if (!enc) {

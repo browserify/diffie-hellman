@@ -12,11 +12,13 @@ var mods = [
 function run(i) {
 	mods.forEach(function (mod) {
 		test(mod + ' run ' + i, function (t){
-			t.plan(3);
+			t.plan(5);
 			var dh1 = nodeCrypto.getDiffieHellman(mod);
 			var p1 = dh1.getPrime().toString('hex');
 			dh1.generateKeys();
 			var dh2 = myCrypto.getDiffieHellman(mod);
+			t.equals(typeof dh1.setPublicKey, typeof dh2.setPublicKey, 'same methods');
+			t.equals(typeof dh1.setPrivateKey, typeof dh2.setPrivateKey, 'same methods');
 			var p2 = dh2.getPrime().toString('hex');
 			dh2.generateKeys();
 			t.equals(p1, p2, 'equal primes');
@@ -34,12 +36,14 @@ function run(i) {
 function bylen(t) {
 	return function (len){
 		t.test('' + len, function (t) {
-			t.plan(3);
+			t.plan(5);
 			var dh2 = myCrypto.createDiffieHellman(len);
 			var prime2 = dh2.getPrime();
 			var p2 = prime2.toString('hex');
 			var dh1 = nodeCrypto.createDiffieHellman(prime2);
 			var p1 = dh1.getPrime().toString('hex');
+			t.equals(typeof dh1.setPublicKey, typeof dh2.setPublicKey, 'same methods');
+			t.equals(typeof dh1.setPrivateKey, typeof dh2.setPrivateKey, 'same methods');
 			dh1.generateKeys();
 			dh2.generateKeys();
 			t.equals(p1, p2, 'equal primes');
@@ -55,7 +59,7 @@ function bylen(t) {
 function bylen2(t) {
 	return function (len){
 		t.test('' + len, function (t) {
-			t.plan(3);
+			t.plan(5);
 			var dh2 = nodeCrypto.createDiffieHellman(len);
 			var prime2 = dh2.getPrime();
 			var p2 = prime2.toString('hex');
@@ -63,6 +67,8 @@ function bylen2(t) {
 			var p1 = dh1.getPrime().toString('hex');
 			dh1.generateKeys();
 			dh2.generateKeys();
+			t.equals(typeof dh1.setPublicKey, typeof dh2.setPublicKey, 'same methods');
+			t.equals(typeof dh1.setPrivateKey, typeof dh2.setPrivateKey, 'same methods');
 			t.equals(p1, p2, 'equal primes');
 			var pubk1 = dh1.getPublicKey();
 			var pubk2 = dh2.getPublicKey();
