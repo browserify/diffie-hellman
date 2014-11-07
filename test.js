@@ -3,7 +3,7 @@ var nodeCrypto = require('crypto');
 var myCrypto = require('./');
 
 var mods = [
-   'modp1', 'modp2', 'modp5', 'modp14', 'modp15', 'modp16'/*, 'modp17', 'modp18'*/
+   'modp1', 'modp2', 'modp5', 'modp14', 'modp15', 'modp16', 'modp17', 'modp18'
 ];
 
  var lens = [

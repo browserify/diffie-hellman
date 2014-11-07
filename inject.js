@@ -3,9 +3,6 @@ var DH = require('./dh');
 var generatePrime = require('./generatePrime');
 module.exports = function (crypto, exports) {
 	exports.getDiffieHellman = function (mod) {
-		if (mod === 'modp17' || mod === 'modp18') {
-			throw new Error(mod + ' is not implimented');
-		}
 		return new DH(new Buffer(primes[mod].prime, 'hex'), crypto);
 	};
 	exports.createDiffieHellman = function (prime, enc) {
