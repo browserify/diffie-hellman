@@ -40,7 +40,8 @@ function bylen(t) {
 			var dh2 = myCrypto.createDiffieHellman(len);
 			var prime2 = dh2.getPrime();
 			var p2 = prime2.toString('hex');
-			var dh1 = nodeCrypto.createDiffieHellman(prime2);
+			var dh1 = nodeCrypto.createDiffieHellman(prime2, 2);
+			//console.log('error', dh1.verifyError)
 			var p1 = dh1.getPrime().toString('hex');
 			t.equals(typeof dh1.setPublicKey, typeof dh2.setPublicKey, 'same methods');
 			t.equals(typeof dh1.setPrivateKey, typeof dh2.setPrivateKey, 'same methods');
@@ -79,17 +80,17 @@ function bylen2(t) {
 		});
 	};
 }
-if (process.version && process.version.split('.').length === 3 && parseInt(process.version.split('.')[1], 10) > 10) {
-	test('create primes', function (t) {
-		var f = bylen(t);
-		lens.forEach(f);
-	});
-}
-test('create primes other way', function (t) {
-		var f = bylen2(t);
-		lens.forEach(f);
-	});
-var i = 0;
-while (++i < 2) {
-	run(i);
-}
+
+test('create primes', function (t) {
+	var f = bylen(t);
+	lens.forEach(f);
+});
+
+// test('create primes other way', function (t) {
+// 		var f = bylen2(t);
+// 		lens.forEach(f);
+// 	});
+// var i = 0;
+// while (++i < 2) {
+// 	run(i);
+// }
