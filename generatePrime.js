@@ -8,9 +8,10 @@ var millerRabin = new MillerRabin();
 var ONE = new BN(1);
 var TWO = new BN(2);
 var ELEVEN = new BN(11);
+var FOUR = new BN(4);
 function findPrime(bits, crypto) {
 
-  function _generateRandom(bits) {
+  function generateRandom(bits) {
     var bytes = bits >> 3;
     bytes = bytes || 1;
     var out = new BN(crypto.randomBytes(bytes));
@@ -23,12 +24,8 @@ function findPrime(bits, crypto) {
     if (!out.testn(1)) {
       out.iadd(TWO);
     }
-    return out;
-  }
-  function generateRandom(bits) {
-    var out = _generateRandom(bits);
     while (out.mod(TWENTYFOUR).cmp(ELEVEN)) {
-      out = _generateRandom(bits);
+      out.iadd(FOUR);
     }
     return out;
   }
