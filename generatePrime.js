@@ -9,7 +9,8 @@ var millerRabin = new MillerRabin();
 var ONE = new BN(1);
 var TWO = new BN(2);
 var FIVE = new BN(5);
-var SIX = new BN(6);
+var SIXTEEN = new BN(16);
+var EIGHT = new BN(8);
 var TEN = new BN(10);
 var THREE = new BN(3);
 var SEVEN = new BN(7);
@@ -77,8 +78,8 @@ function findPrime(bits, gen ,crypto) {
         rem = out.mod(TEN);
       }
       comp = {
-        major: [FOUR, SIX],
-        minor: [TWO, THREE]
+        major: [FOUR, SIXTEEN],
+        minor: [TWO, EIGHT]
       };
     } else {
       comp = {
