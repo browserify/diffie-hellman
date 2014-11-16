@@ -9,6 +9,8 @@ var mods = [
  var lens = [
   64, 65, 128, 384, 512, 1024,
   192, 224, 256];
+   var lens2 = [
+  64, 65, 128];
 function run(i) {
 	mods.forEach(function (mod) {
 		test(mod + ' run ' + i, function (t){
@@ -83,14 +85,39 @@ function bylen2(t) {
 
 test('create primes', function (t) {
 	var f = bylen(t);
-	lens.forEach(f);
+	lens2.forEach(f);
 });
 
-// test('create primes other way', function (t) {
-// 		var f = bylen2(t);
-// 		lens.forEach(f);
-// 	});
-// var i = 0;
-// while (++i < 2) {
-// 	run(i);
-// }
+test('create primes other way', function (t) {
+		var f = bylen2(t);
+		lens.forEach(f);
+	});
+var i = 0;
+while (++i < 2) {
+	run(i);
+}
+function isNode10() {
+  return process.version && process.version.split('.').length === 3 && parseInt(process.version.split('.')[1], 10) <= 10;
+}
+if (!isNode10()) {
+	test('check errors', function (t) {
+		t.plan(5);
+		var p1 = new Buffer('db10e7f61adcc193', 'hex');
+		var p2 = new Buffer('db10e7f61adcc194', 'hex');
+		var dh1 = myCrypto.createDiffieHellman(p1);
+		var dh2 = nodeCrypto.createDiffieHellman(p1);
+		t.equals(dh1.verifyError, dh2.verifyError, 'same error for good prime');
+		dh1 = myCrypto.createDiffieHellman(p2);
+		dh2 = nodeCrypto.createDiffieHellman(p2);
+		t.equals(dh1.verifyError, dh2.verifyError, 'same error for bad prime');
+		dh1 = myCrypto.createDiffieHellman(p2, new Buffer([7]));
+		dh2 = nodeCrypto.createDiffieHellman(p2, new Buffer([7]));
+		t.equals(dh1.verifyError, dh2.verifyError, 'same error for bad prime non testable generator');
+		dh1 = myCrypto.createDiffieHellman(p1.toString('hex'), 'hex', new Buffer([5]));
+		dh2 = nodeCrypto.createDiffieHellman(p1.toString('hex'), 'hex', new Buffer([5]));
+		t.equals(dh1.verifyError, dh2.verifyError, 'same error for good prime wrong generator');
+		dh1 = myCrypto.createDiffieHellman(p1, new Buffer([11]).toString('hex'), 'hex');
+		dh2 = nodeCrypto.createDiffieHellman(p1, new Buffer([11]).toString('hex'), 'hex');
+		t.equals(dh1.verifyError, dh2.verifyError, 'same error for good prime non testable generator');
+	});
+}

@@ -1,6 +1,7 @@
 
 module.exports = findPrime;
-
+findPrime.simpleSieve = simpleSieve;
+findPrime.fermatTest = fermatTest;
 var BN = require('bn.js');
 var TWENTYFOUR = new BN(24);
 var MillerRabin = require('miller-rabin');
@@ -96,7 +97,6 @@ function findPrime(bits, crypto) {
       continue;
     }
     if (millerRabin.test(num)) {
-      console.log('found in', runs);
       return num;
     }
     num.iadd(TWENTYFOUR);

@@ -1,5 +1,12 @@
 var BN = require('bn.js');
-
+var MillerRabin = require('miller-rabin');
+var millerRabin = new MillerRabin();
+var TWENTYFOUR = new BN(24);
+var ELEVEN = new BN(11);
+var TEN = new BN(10);
+var THREE = new BN(3);
+var SEVEN = new BN(7);
+var primes = require('./generatePrime');
 module.exports = DH;
 function setPublicKey(pub, enc) {
 	enc = enc || 'utf8';
@@ -15,15 +22,84 @@ function setPrivateKey(priv, enc) {
 	}
 	this._priv = new BN(priv);
 }
-function DH(prime, crypto, malleable) {
-	this.setGenerator(new Buffer([2]));
+var primeCache = {};
+function checkPrime(prime, generator) {
+	var gen = generator.toString('hex');
+	var hex = [gen, prime.toString(16)].join('_');
+	if (hex in primeCache) {
+		return primeCache[hex];
+	}
+	var error = 0;
+	
+	if (prime.isEven() ||
+		!primes.simpleSieve ||
+		!primes.fermatTest(prime) ||
+		!millerRabin.test(prime)) {
+		//not a prime so +1
+		error += 1;
+		
+		if (gen === '02' || gen === '05') {
+			// we'd be able to check the generator
+			// it would fail so +8
+			error += 8;
+		} else {
+			//we wouldn't be able to test the generator
+			// so +4
+			error += 4;
+		}
+		primeCache[hex] = error;
+		return error;
+	}
+	if (!millerRabin.test(prime.shrn(1))) {
+		//not a safe prime
+		error += 2;
+	}
+	var gen = generator.toString('hex');
+	var rem;
+	switch (gen) {
+		case '02':
+		  if (prime.mod(TWENTYFOUR).cmp(ELEVEN)) {
+		  	// unsuidable generator
+		  	error += 8;
+		  }
+		  break;
+		case '05':
+		  rem = prime.mod(TEN);
+		  if (rem.cmp(THREE) && rem.cmp(SEVEN)) {
+		  	// prime mod 10 needs to equal 3 or 7
+		  	error += 8;
+		  } 
+		  break;
+		default: 
+		  error += 4;
+	}
+	primeCache[hex] = error;
+	return error;
+}
+function defineError (self, error) {
+	try {
+		Object.defineProperty(self, 'verifyError', {
+	    enumerable: true,
+	    value: error,
+	    writable: false
+	  });
+	} catch(e) {
+		self.verifyError = error;
+	}
+}
+function DH(prime, generator,crypto, malleable) {
+	this.setGenerator(generator);
 	this.__prime = new BN(prime);
 	this._prime = BN.mont(this.__prime);
 	this._pub = void 0;
 	this._priv = void 0;
+	
 	if (malleable) {
 		this.setPublicKey = setPublicKey;
 		this.setPrivateKey = setPrivateKey;
+		defineError(this, checkPrime(this.__prime, generator));
+	} else {
+		defineError(this, 8);
 	}
 	this._makeNum = function makeNum() {
 		return crypto.randomBytes(192);
