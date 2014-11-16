@@ -35,14 +35,14 @@ function run(i) {
 }
 
 
-function bylen(t) {
+function bylen(t, generator) {
 	return function (len){
 		t.test('' + len, function (t) {
-			t.plan(5);
-			var dh2 = myCrypto.createDiffieHellman(len);
+			t.plan(6);
+			var dh2 = myCrypto.createDiffieHellman(len, generator);
 			var prime2 = dh2.getPrime();
 			var p2 = prime2.toString('hex');
-			var dh1 = nodeCrypto.createDiffieHellman(prime2, 2);
+			var dh1 = nodeCrypto.createDiffieHellman(prime2, generator);
 			//console.log('error', dh1.verifyError)
 			var p1 = dh1.getPrime().toString('hex');
 			t.equals(typeof dh1.setPublicKey, typeof dh2.setPublicKey, 'same methods');
@@ -50,6 +50,7 @@ function bylen(t) {
 			dh1.generateKeys();
 			dh2.generateKeys();
 			t.equals(p1, p2, 'equal primes');
+			t.equals(dh1.getGenerator('hex'), dh2.getGenerator('hex'), 'equal generators');
 			var pubk1 = dh1.getPublicKey();
 			var pubk2 = dh2.getPublicKey();
 			t.notEquals(pubk1.toString('hex'), pubk2.toString('hex'), 'diff public keys');
@@ -83,8 +84,12 @@ function bylen2(t) {
 	};
 }
 
-test('create primes', function (t) {
-	var f = bylen(t);
+test('create primes gen 2', function (t) {
+	var f = bylen(t, new Buffer([2]));
+	lens2.forEach(f);
+});
+test('create primes gen 5', function (t) {
+	var f = bylen(t, new Buffer([5]));
 	lens2.forEach(f);
 });
 

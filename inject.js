@@ -11,9 +11,7 @@ module.exports = function (crypto, exports) {
 	}
 	exports.createDiffieHellman = exports.DiffieHellman = DiffieHellman;
 	function DiffieHellman(prime, enc, generator, genc) {
-		if (typeof prime === 'number') {
-			return new DH(generatePrime(prime, crypto), new Buffer([2]), crypto, true);
-		}
+		
 		if (Buffer.isBuffer(enc) ||
 			(typeof enc === 'string' && ['hex', 'binary', 'base64'].indexOf(enc) === -1)) {
 			genc = generator;
@@ -23,12 +21,16 @@ module.exports = function (crypto, exports) {
 		enc = enc || 'binary';
 		genc = genc || 'binary';
 		generator = generator || new Buffer([2]);
-		if (!Buffer.isBuffer(prime)) {
-			prime = new Buffer(prime, enc);
-		}
 		if (!Buffer.isBuffer(generator)) {
 			generator = new Buffer(generator, genc);
 		}
+		if (typeof prime === 'number') {
+			return new DH(generatePrime(prime, generator, crypto), generator, crypto, true);
+		}
+		if (!Buffer.isBuffer(prime)) {
+			prime = new Buffer(prime, enc);
+		}
+		
 		return new DH(prime, generator, crypto, true);
 	};
 }

@@ -8,6 +8,11 @@ var MillerRabin = require('miller-rabin');
 var millerRabin = new MillerRabin();
 var ONE = new BN(1);
 var TWO = new BN(2);
+var FIVE = new BN(5);
+var SIX = new BN(6);
+var TEN = new BN(10);
+var THREE = new BN(3);
+var SEVEN = new BN(7);
 var ELEVEN = new BN(11);
 var FOUR = new BN(4);
 var TWELVE = new BN(12);
@@ -47,60 +52,64 @@ function fermatTest(p) {
   var red = BN.mont(p);
   return TWO.toRed(red).redPow(p.subn(1)).fromRed().cmpn(1) === 0;
 }
-function findPrime(bits, crypto) {
-
+function findPrime(bits, gen ,crypto) {
+  gen = new BN(gen);
+  var runs, comp;
   function generateRandom(bits) {
+    runs = -1;
     var r = crypto.randomBytes(Math.ceil(bits / 8));
     r[0] |= 0xc0;
     r[r.length - 1] |= 3;
-
+    var rem;
     var out = new BN(r);
-    while (out.mod(TWENTYFOUR).cmp(ELEVEN)) {
-      out.iadd(FOUR);
+    if (!gen.cmp(TWO)) {
+      while (out.mod(TWENTYFOUR).cmp(ELEVEN)) {
+        out.iadd(FOUR);
+      }
+      comp = {
+        major: [TWENTYFOUR],
+        minor: [TWELVE]
+      };
+    } else if (!gen.cmp(FIVE)) {
+      rem = out.mod(TEN);
+      while (rem.cmp(THREE)) {
+        out.iadd(FOUR);
+        rem = out.mod(TEN);
+      }
+      comp = {
+        major: [FOUR, SIX],
+        minor: [TWO, THREE]
+      };
+    } else {
+      comp = {
+        major: [FOUR],
+        minor: [TWO]
+      }
     }
     return out;
   }
   var num = generateRandom(bits);
 
 
-  var runs = 0;
+
   var n2 = num.shrn(1);
+
   while (true) {
-    runs++;
     if (num.bitLength() > bits) {
       num = generateRandom(bits);
       n2 = num.shrn(1);
     }
-    if (!simpleSieve(n2)) {
-      num.iadd(TWENTYFOUR);
-      n2.iadd(TWELVE);
-      continue;
-    }
-    if (!fermatTest(n2)) {
-      num.iadd(TWENTYFOUR);
-      n2.iadd(TWELVE);
-      continue;
-    }
-    if (!millerRabin.test(n2)) {
-      num.iadd(TWENTYFOUR);
-      n2.iadd(TWELVE);
-      continue;
-    }
-    if (!simpleSieve(num)) {
-      num.iadd(TWENTYFOUR);
-      n2.iadd(TWELVE);
-      continue;
-    }
-    if (!fermatTest(num)) {
-      num.iadd(TWENTYFOUR);
-      n2.iadd(TWELVE);
-      continue;
-    }
-    if (millerRabin.test(num)) {
+    runs++;
+    if (simpleSieve(n2) &&
+      fermatTest(n2) &&
+      millerRabin.test(n2) &&
+      simpleSieve(num) &&
+      fermatTest(num) &&
+      millerRabin.test(num)) {
       return num;
     }
-    num.iadd(TWENTYFOUR);
-    n2.iadd(TWELVE);
+    num.iadd(comp.major[runs%comp.major.length]);
+    n2.iadd(comp.minor[runs%comp.minor.length]);
   }
 
 }
