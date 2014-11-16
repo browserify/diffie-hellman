@@ -5,7 +5,9 @@ var myCrypto = require('./');
 var mods = [
    'modp1', 'modp2', 'modp5', 'modp14', 'modp15', 'modp16', 'modp17', 'modp18'
 ];
-
+function isNode10() {
+  return process.version && process.version.split('.').length === 3 && parseInt(process.version.split('.')[1], 10) <= 10;
+}
  var lens = [
   64, 65, 128, 384, 512, 1024,
   192, 224, 256];
@@ -88,10 +90,12 @@ test('create primes gen 2', function (t) {
 	var f = bylen(t, new Buffer([2]));
 	lens2.forEach(f);
 });
-test('create primes gen 5', function (t) {
-	var f = bylen(t, new Buffer([5]));
-	lens2.forEach(f);
-});
+if (!isNode10()) {
+	test('create primes gen 5', function (t) {
+		var f = bylen(t, new Buffer([5]));
+		lens2.forEach(f);
+	});
+}
 
 test('create primes other way', function (t) {
 		var f = bylen2(t);
