@@ -54,15 +54,32 @@ function fermatTest(p) {
   return TWO.toRed(red).redPow(p.subn(1)).fromRed().cmpn(1) === 0;
 }
 function findPrime(bits, gen ,crypto) {
+  if (bits < 16) {
+    // this is what openssl does
+    if (gen === 2 || gen === 5) {
+      return new BN([0x8c, 0x7b]);
+    } else {
+      return new BN([0x8c, 0x27]);
+    }
+  }
+  var rebits = bits;
+  if (bits < 22) {
+    rebits = 22;
+  }
   gen = new BN(gen);
   var runs, comp;
   function generateRandom(bits) {
     runs = -1;
-    var r = crypto.randomBytes(Math.ceil(bits / 8));
-    r[0] |= 0xc0;
-    r[r.length - 1] |= 3;
-    var rem;
-    var out = new BN(r);
+    var out = new BN(crypto.randomBytes(Math.ceil(bits / 8)));
+    while (out.bitLength() > bits) {
+      out.ishrn(1);
+    }
+    if (out.isEven()) {
+      out.iadd(ONE);
+    }
+    if (!out.testn(1)) {
+      out.iadd(TWO);
+    }
     if (!gen.cmp(TWO)) {
       while (out.mod(TWENTYFOUR).cmp(ELEVEN)) {
         out.iadd(FOUR);
@@ -85,7 +102,7 @@ function findPrime(bits, gen ,crypto) {
       comp = {
         major: [FOUR],
         minor: [TWO]
-      }
+      };
     }
     return out;
   }
@@ -96,7 +113,7 @@ function findPrime(bits, gen ,crypto) {
   var n2 = num.shrn(1);
 
   while (true) {
-    if (num.bitLength() > bits) {
+    if (num.bitLength() > rebits) {
       num = generateRandom(bits);
       n2 = num.shrn(1);
     }

@@ -9,7 +9,7 @@ function isNode10() {
   return process.version && process.version.split('.').length === 3 && parseInt(process.version.split('.')[1], 10) <= 10;
 }
  var lens = [
-  64, 65, 128, 384, 512, 1024,
+  2, 8, 16, 17, 18, 20, 21, 22, 64, 65, 128, 384, 512, 1024,
   192, 224, 256];
    var lens2 = [
   64, 65, 128];
