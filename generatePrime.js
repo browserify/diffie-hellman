@@ -44,8 +44,13 @@ function simpleSieve(p) {
   var primes = _getPrimes();
 
   for (var i = 0; i < primes.length; i++)
-    if (p.modn(primes[i]) === 0)
-      return false;
+    if (p.modn(primes[i]) === 0) {
+      if (p.cmpn(primes[i]) === 0) {
+        return true;
+      } else {
+        return false;
+      }
+    }
 
   return true;
 }
@@ -61,10 +66,6 @@ function findPrime(bits, gen ,crypto) {
     } else {
       return new BN([0x8c, 0x27]);
     }
-  }
-  var rebits = bits;
-  if (bits < 22) {
-    rebits = 22;
   }
   gen = new BN(gen);
   var runs, comp;
@@ -113,7 +114,7 @@ function findPrime(bits, gen ,crypto) {
   var n2 = num.shrn(1);
 
   while (true) {
-    if (num.bitLength() > rebits) {
+    while (num.bitLength() > bits) {
       num = generateRandom(bits);
       n2 = num.shrn(1);
     }
