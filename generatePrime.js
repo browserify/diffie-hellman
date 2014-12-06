@@ -119,12 +119,9 @@ function findPrime(bits, gen ,crypto) {
       n2 = num.shrn(1);
     }
     runs++;
-    if (simpleSieve(n2) &&
-      fermatTest(n2) &&
-      millerRabin.test(n2) &&
-      simpleSieve(num) &&
-      fermatTest(num) &&
-      millerRabin.test(num)) {
+    if (simpleSieve(n2) &&  simpleSieve(num) &&
+      fermatTest(n2) &&  fermatTest(num) &&
+      millerRabin.test(n2) && millerRabin.test(num)) {
       return num;
     }
     num.iadd(comp.major[runs%comp.major.length]);
