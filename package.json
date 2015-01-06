@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/calvinmetcalf/diffie-hellman",
   "dependencies": {
-    "bn.js": "^0.16.0",
+    "bn.js": "^1.0.0",
     "miller-rabin": "^1.1.2"
   },
   "devDependencies": {
