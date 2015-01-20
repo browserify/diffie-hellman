@@ -3,12 +3,13 @@
   "version": "2.2.3",
   "description": "pure js diffie-hellman",
   "main": "index.js",
+  "browser": "browser.js",
   "scripts": {
     "test": "node test.js | tspec"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/calvinmetcalf/diffie-hellman.git"
+    "url": "https://github.com/crypto-browserify/diffie-hellman.git"
   },
   "keywords": [
     "diffie",
@@ -19,12 +20,13 @@
   "author": "Calvin Metcalf",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/calvinmetcalf/diffie-hellman/issues"
+    "url": "https://github.com/crypto-browserify/diffie-hellman/issues"
   },
-  "homepage": "https://github.com/calvinmetcalf/diffie-hellman",
+  "homepage": "https://github.com/crypto-browserify/diffie-hellman",
   "dependencies": {
     "bn.js": "^1.0.0",
-    "miller-rabin": "^1.1.2"
+    "miller-rabin": "^1.1.2",
+    "randombytes": "^2.0.0"
   },
   "devDependencies": {
     "tap-spec": "^1.0.1",

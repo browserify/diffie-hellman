@@ -1,4 +1,4 @@
-
+var randomBytes = require('randombytes');
 module.exports = findPrime;
 findPrime.simpleSieve = simpleSieve;
 findPrime.fermatTest = fermatTest;
@@ -58,7 +58,7 @@ function fermatTest(p) {
   var red = BN.mont(p);
   return TWO.toRed(red).redPow(p.subn(1)).fromRed().cmpn(1) === 0;
 }
-function findPrime(bits, gen ,crypto) {
+function findPrime(bits, gen) {
   if (bits < 16) {
     // this is what openssl does
     if (gen === 2 || gen === 5) {
@@ -71,7 +71,7 @@ function findPrime(bits, gen ,crypto) {
   var runs, comp;
   function generateRandom(bits) {
     runs = -1;
-    var out = new BN(crypto.randomBytes(Math.ceil(bits / 8)));
+    var out = new BN(randomBytes(Math.ceil(bits / 8)));
     while (out.bitLength() > bits) {
       out.ishrn(1);
     }

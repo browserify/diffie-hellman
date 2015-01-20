@@ -7,6 +7,7 @@ var TEN = new BN(10);
 var THREE = new BN(3);
 var SEVEN = new BN(7);
 var primes = require('./generatePrime');
+var randomBytes = require('randombytes');
 module.exports = DH;
 function setPublicKey(pub, enc) {
 	enc = enc || 'utf8';
@@ -54,7 +55,6 @@ function checkPrime(prime, generator) {
 		//not a safe prime
 		error += 2;
 	}
-	var gen = generator.toString('hex');
 	var rem;
 	switch (gen) {
 		case '02':
@@ -87,7 +87,7 @@ function defineError (self, error) {
 		self.verifyError = error;
 	}
 }
-function DH(prime, generator,crypto, malleable) {
+function DH(prime, generator, malleable) {
 	this.setGenerator(generator);
 	this.__prime = new BN(prime);
 	this._prime = BN.mont(this.__prime);
@@ -102,7 +102,7 @@ function DH(prime, generator,crypto, malleable) {
 		defineError(this, 8);
 	}
 	this._makeNum = function makeNum() {
-		return crypto.randomBytes(prime.length);
+		return randomBytes(prime.length);
 	};
 }
 DH.prototype.generateKeys = function () {
