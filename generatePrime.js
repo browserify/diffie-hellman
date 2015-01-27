@@ -40,6 +40,7 @@ function _getPrimes() {
   primes = res;
   return res;
 }
+
 function simpleSieve(p) {
   var primes = _getPrimes();
 
@@ -54,10 +55,12 @@ function simpleSieve(p) {
 
   return true;
 }
+
 function fermatTest(p) {
   var red = BN.mont(p);
   return TWO.toRed(red).redPow(p.subn(1)).fromRed().cmpn(1) === 0;
 }
+
 function findPrime(bits, gen) {
   if (bits < 16) {
     // this is what openssl does
@@ -108,8 +111,6 @@ function findPrime(bits, gen) {
     return out;
   }
   var num = generateRandom(bits);
-
-
 
   var n2 = num.shrn(1);
 
