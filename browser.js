@@ -3,14 +3,14 @@ var primes = require('./primes.json');
 
 var DH = require('./dh');
 
-function DiffieHellmanGroup(mod) {
-  var prime = new Buffer(primes[mod].prime, 'hex')
-  var gen = new Buffer(primes[mod].gen, 'hex')
+function getDiffieHellman(mod) {
+  var prime = new Buffer(primes[mod].prime, 'hex');
+  var gen = new Buffer(primes[mod].gen, 'hex');
 
 	return new DH(prime, gen);
 }
 
-function DiffieHellman(prime, enc, generator, genc) {
+function createDiffieHellman(prime, enc, generator, genc) {
 	if (Buffer.isBuffer(enc) || (typeof enc === 'string' && ['hex', 'binary', 'base64'].indexOf(enc) === -1)) {
 		genc = generator;
 		generator = enc;
@@ -36,5 +36,5 @@ function DiffieHellman(prime, enc, generator, genc) {
 	return new DH(prime, generator, true);
 }
 
-exports.DiffieHellmanGroup = exports.createDiffieHellmanGroup = exports.getDiffieHellman = DiffieHellmanGroup;
-exports.createDiffieHellman = exports.DiffieHellman = DiffieHellman;
+exports.DiffieHellmanGroup = exports.createDiffieHellmanGroup = exports.getDiffieHellman = getDiffieHellman;
+exports.createDiffieHellman = exports.DiffieHellman = createDiffieHellman;
