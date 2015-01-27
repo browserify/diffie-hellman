@@ -1,7 +1,7 @@
-var generatePrime = require('./generatePrime');
-var primes = require('./primes.json');
+var generatePrime = require('./lib/generatePrime');
+var primes = require('./lib/primes');
 
-var DH = require('./dh');
+var DH = require('./lib/dh');
 
 function getDiffieHellman(mod) {
   var prime = new Buffer(primes[mod].prime, 'hex');
