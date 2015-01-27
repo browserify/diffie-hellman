@@ -16,6 +16,7 @@ function setPublicKey(pub, enc) {
     pub = new Buffer(pub, enc);
   }
   this._pub = new BN(pub);
+  return this;
 }
 
 function setPrivateKey(priv, enc) {
@@ -24,6 +25,7 @@ function setPrivateKey(priv, enc) {
     priv = new Buffer(priv, enc);
   }
   this._priv = new BN(priv);
+  return this;
 }
 
 var primeCache = {};
@@ -95,6 +97,7 @@ function DH(prime, generator, malleable) {
   this.setGenerator(generator);
   this.__prime = new BN(prime);
   this._prime = BN.mont(this.__prime);
+  this._primeLen = prime.length;
   this._pub = void 0;
   this._priv = void 0;
   
@@ -105,14 +108,11 @@ function DH(prime, generator, malleable) {
   } else {
     defineError(this, 8);
   }
-  this._makeNum = function makeNum() {
-    return randomBytes(prime.length);
-  };
 }
 
 DH.prototype.generateKeys = function () {
   if (!this._priv) {
-    this._priv = new BN(this._makeNum());
+    this._priv = new BN(randomBytes(this._primeLen));
   }
   this._pub = this._gen.toRed(this._prime).redPow(this._priv).fromRed();
   return this.getPublicKey();
@@ -133,19 +133,19 @@ DH.prototype.computeSecret = function (other) {
 };
 
 DH.prototype.getPublicKey = function getPublicKey(enc) {
-  return returnValue(this._pub, enc);
+  return formatReturnValue(this._pub, enc);
 };
 
 DH.prototype.getPrivateKey = function getPrivateKey(enc) {
-  return returnValue(this._priv, enc);
+  return formatReturnValue(this._priv, enc);
 };
 
 DH.prototype.getPrime = function (enc) {
-  return returnValue(this.__prime, enc);
+  return formatReturnValue(this.__prime, enc);
 };
 
 DH.prototype.getGenerator = function (enc) {
-  return returnValue(this._gen, enc);
+  return formatReturnValue(this._gen, enc);
 };
 
 DH.prototype.setGenerator = function (gen, enc) {
@@ -154,9 +154,10 @@ DH.prototype.setGenerator = function (gen, enc) {
     gen = new Buffer(gen, enc);
   }
   this._gen = new BN(gen);
+  return this;
 };
 
-function returnValue(bn, enc) {
+function formatReturnValue(bn, enc) {
   var buf = new Buffer(bn.toArray());
   if (!enc) {
     return buf;
