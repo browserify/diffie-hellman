@@ -7,3 +7,4 @@ node_js:
   - "2"
   - "3"
   - "4"
+sudo: false
