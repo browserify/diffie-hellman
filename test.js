@@ -6,7 +6,16 @@ var mods = [
    'modp1', 'modp2', 'modp5', 'modp14', 'modp15', 'modp16', 'modp17', 'modp18'
 ];
 function isNode10() {
-  return process.version && process.version.split('.').length === 3 && parseInt(process.version.split('.')[1], 10) === 10 && process.version.split('.')[0] === 'v0';
+  if (!process.version) {
+    return false;
+  }
+  var split = process.version.split('.');
+  if (split.length !== 3) {
+    return false;
+  }
+  if (parseInt(split[1], 10) === 10 && split[0] === 'v0') {
+    return true;
+  }
 }
  var lens = [
   2, 8, 16, 17, 18, 20, 21, 22, 64, 65, 128, 384, 512, 1024,
