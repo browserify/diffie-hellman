@@ -16,6 +16,7 @@ function isNode10() {
   if (parseInt(split[1], 10) === 10 && split[0] === 'v0') {
     return true;
   }
+  return false;
 }
  var lens = [
   2, 8, 16, 17, 18, 20, 21, 22, 64, 65, 128, 384, 512, 1024,
