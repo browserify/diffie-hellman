@@ -113,9 +113,6 @@ var i = 0;
 while (++i < 2) {
 	run(i);
 }
-function isNode10() {
-  return process.version && process.version.split('.').length === 3 && parseInt(process.version.split('.')[1], 10) === 10 && parseInt(process.version.split('.')[0] === 0)
-}
 if (!isNode10()) {
 	test('check errors', function (t) {
 		t.plan(5);
