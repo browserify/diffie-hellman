@@ -3,7 +3,7 @@ var primes = require('./lib/primes')
 
 var DH = require('./lib/dh')
 
-function getDiffieHellman(mod) {
+function getDiffieHellman (mod) {
   var prime = new Buffer(primes[mod].prime, 'hex')
   var gen = new Buffer(primes[mod].gen, 'hex')
 
@@ -14,7 +14,7 @@ var ENCODINGS = {
   'binary': true, 'hex': true, 'base64': true
 }
 
-function createDiffieHellman(prime, enc, generator, genc) {
+function createDiffieHellman (prime, enc, generator, genc) {
   if (Buffer.isBuffer(enc) || ENCODINGS[enc] === undefined) {
     return createDiffieHellman(prime, 'binary', enc, generator)
   }
