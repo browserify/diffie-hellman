@@ -10,11 +10,13 @@ function getDiffieHellman(mod) {
   return new DH(prime, gen);
 }
 
+var encodings = {
+  'binary': true, 'hex': true, 'base64': true
+}
+
 function createDiffieHellman(prime, enc, generator, genc) {
-  if (Buffer.isBuffer(enc) || (typeof enc === 'string' && ['hex', 'binary', 'base64'].indexOf(enc) === -1)) {
-    genc = generator;
-    generator = enc;
-    enc = undefined;
+  if (Buffer.isBuffer(enc) || encodings[enc] === undefined) {
+    return createDiffieHellman(prime, 'binary', enc, generator)
   }
 
   enc = enc || 'binary';
