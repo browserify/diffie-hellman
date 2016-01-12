@@ -1,6 +1,6 @@
 {
   "name": "diffie-hellman",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "pure js diffie-hellman",
   "main": "index.js",
   "browser": "browser.js",
