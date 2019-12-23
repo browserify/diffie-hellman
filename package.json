@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/crypto-browserify/diffie-hellman",
   "dependencies": {
-    "bn.js": "^4.1.0",
+    "bn.js": "^5.0.0",
     "miller-rabin": "^4.0.0",
     "randombytes": "^2.0.0"
   },
