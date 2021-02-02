@@ -96,12 +96,12 @@ function bylen2(t) {
 }
 
 test('create primes gen 2', function (t) {
-	var f = bylen(t, new Buffer([2]));
+	var f = bylen(t, Buffer.from([2]));
 	lens2.forEach(f);
 });
 if (!isNode10()) {
 	test('create primes gen 5', function (t) {
-		var f = bylen(t, new Buffer([5]));
+		var f = bylen(t, Buffer.from([5]));
 		lens2.forEach(f);
 	});
 }
@@ -117,22 +117,22 @@ while (++i < 2) {
 if (!isNode10()) {
 	test('check errors', function (t) {
 		t.plan(5);
-		var p1 = new Buffer('db10e7f61adcc193', 'hex');
-		var p2 = new Buffer('db10e7f61adcc194', 'hex');
+		var p1 = Buffer.from('db10e7f61adcc193', 'hex');
+		var p2 = Buffer.from('db10e7f61adcc194', 'hex');
 		var dh1 = myCrypto.createDiffieHellman(p1);
 		var dh2 = nodeCrypto.createDiffieHellman(p1);
 		t.equals(dh1.verifyError, dh2.verifyError, 'same error for good prime');
 		dh1 = myCrypto.createDiffieHellman(p2);
 		dh2 = nodeCrypto.createDiffieHellman(p2);
 		t.equals(dh1.verifyError, dh2.verifyError, 'same error for bad prime');
-		dh1 = myCrypto.createDiffieHellman(p2, new Buffer([7]));
-		dh2 = nodeCrypto.createDiffieHellman(p2, new Buffer([7]));
+		dh1 = myCrypto.createDiffieHellman(p2, Buffer.from([7]));
+		dh2 = nodeCrypto.createDiffieHellman(p2, Buffer.from([7]));
 		t.equals(dh1.verifyError, dh2.verifyError, 'same error for bad prime non testable generator');
-		dh1 = myCrypto.createDiffieHellman(p1.toString('hex'), 'hex', new Buffer([5]));
-		dh2 = nodeCrypto.createDiffieHellman(p1.toString('hex'), 'hex', new Buffer([5]));
+		dh1 = myCrypto.createDiffieHellman(p1.toString('hex'), 'hex', Buffer.from([5]));
+		dh2 = nodeCrypto.createDiffieHellman(p1.toString('hex'), 'hex', Buffer.from([5]));
 		t.equals(dh1.verifyError, dh2.verifyError, 'same error for good prime wrong generator');
-		dh1 = myCrypto.createDiffieHellman(p1, new Buffer([11]).toString('hex'), 'hex');
-		dh2 = nodeCrypto.createDiffieHellman(p1, new Buffer([11]).toString('hex'), 'hex');
+		dh1 = myCrypto.createDiffieHellman(p1, Buffer.from([11]).toString('hex'), 'hex');
+		dh2 = nodeCrypto.createDiffieHellman(p1, Buffer.from([11]).toString('hex'), 'hex');
 		t.equals(dh1.verifyError, dh2.verifyError, 'same error for good prime non testable generator');
 	});
 }
