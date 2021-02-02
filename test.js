@@ -1,6 +1,7 @@
 var test = require('tape');
 var nodeCrypto = require('./');
 var myCrypto = require('./browser');
+var Buffer = require('safe-buffer').Buffer
 
 var mods = [
    'modp1', 'modp2', 'modp5', 'modp14', 'modp15', 'modp16', 'modp17', 'modp18'
