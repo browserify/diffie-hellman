@@ -1,5 +1,6 @@
 var generatePrime = require('./lib/generatePrime')
 var primes = require('./lib/primes.json')
+var Buffer = require('safe-buffer').Buffer
 
 var DH = require('./lib/dh')
 
